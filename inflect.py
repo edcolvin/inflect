@@ -3606,6 +3606,33 @@ class engine:
         """
         return " "
 
+    def year_to_words(self, num):
+        """ 
+        return the standard spoken English form of a year (date) 
+        n < 1000 or n > 9999: spoken normally     
+        n // 10 % 100 == 0: spoken normally (2000, 2005, 1001) 
+        n % 100 == 0: nineteen hundred, thirty-six hundred (1900, 3600)
+        n // 10 % 10 == 0: nineteen oh one, thirty-six oh one (3601)
+        Otherwise, divide into two parts: twenty twenty-one (2021) 
+        """
+        num = int(num)
+
+        if num < 1000 or num > 9999 or num // 10 % 100 == 0:
+            return self.number_to_words(num)
+        elif num % 100 == 0:
+            return self.number_to_words(str(num)[:2]) + ' hundred'
+        else:
+            digits = str(num)
+            hundreds = number_to_words(digits[:2])
+
+            if num // 10 % 10 == 0:
+                ones = 'oh ' + self.number_to_words(digits[2:])
+            else:
+                ones = self.number_to_words(digits[2:])        
+            
+            return hundreds + ' ' + ones
+    
+    
     def number_to_words(
         self,
         num,
